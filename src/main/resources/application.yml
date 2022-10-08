@@ -1,0 +1,18 @@
+spring:
+  data:
+    mongodb:
+      uri: ${MONGO_URI:mongodb://localhost:27017/easygest}
+      auto-index-creation: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+
+
+management:
+  endpoints:
+    enabled-by-default: false
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+      mongo:
+        enabled: true
