@@ -16,15 +16,16 @@ public class UserController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-
     @PostMapping
     public Mono<String> current(@RequestBody Mono<NewUserRequest> newUser) {
         return newUser.map(nur -> User.builder()
+                        .fullName(nur.getFullName())
                         .username(nur.getUsername())
                         .password(passwordEncoder.encode(nur.getPassword()))
                         .email(nur.getEmail()).build())
                 .flatMap(userRepository::insert)
-                .map(User::getId);
+                .map(User::getId)
+                .log();
     }
 
     @GetMapping

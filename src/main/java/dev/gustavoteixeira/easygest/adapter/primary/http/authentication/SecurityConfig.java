@@ -1,8 +1,7 @@
-package dev.gustavoteixeira.easygest.adapter;
+package dev.gustavoteixeira.easygest.adapter.primary.http.authentication;
 
 import dev.gustavoteixeira.easygest.model.user.UserRepository;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.authorization.AuthorizationDecision;
@@ -16,10 +15,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 import static org.springframework.http.HttpMethod.*;
-import static org.springframework.http.HttpMethod.GET;
 
 @EnableWebFluxSecurity
 public class SecurityConfig {
@@ -28,10 +31,11 @@ public class SecurityConfig {
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http,
                                                 JwtTokenProvider tokenProvider,
                                                 ReactiveAuthenticationManager reactiveAuthenticationManager) {
-        final String PATH_POSTS = "/posts/**";
         final String USERS_PATH = "/users";
 
-        return http.csrf(ServerHttpSecurity.CsrfSpec::disable)
+        return http
+                .cors().and()
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authenticationManager(reactiveAuthenticationManager)
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
@@ -40,9 +44,6 @@ public class SecurityConfig {
                         .pathMatchers("/actuator/**").permitAll()
                         .pathMatchers(GET, USERS_PATH).permitAll()
                         .pathMatchers(DELETE, USERS_PATH).permitAll()
-                        .pathMatchers(DELETE, PATH_POSTS).hasRole("ADMIN")
-                        .pathMatchers(PATH_POSTS).authenticated()
-                        .pathMatchers("/me").authenticated()
                         .pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
                         .anyExchange().permitAll()
                 )
@@ -82,6 +83,15 @@ public class SecurityConfig {
         var authenticationManager = new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
         authenticationManager.setPasswordEncoder(passwordEncoder);
         return authenticationManager;
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        var corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(List.of("*"));
+        var source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
     }
 
 }

@@ -1,4 +1,4 @@
-package dev.gustavoteixeira.easygest.adapter;
+package dev.gustavoteixeira.easygest.adapter.primary.http.authentication;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;
