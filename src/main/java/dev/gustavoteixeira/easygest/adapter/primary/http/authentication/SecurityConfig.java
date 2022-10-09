@@ -2,6 +2,7 @@ package dev.gustavoteixeira.easygest.adapter.primary.http.authentication;
 
 import dev.gustavoteixeira.easygest.model.user.UserRepository;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.authorization.AuthorizationDecision;

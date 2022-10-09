@@ -18,6 +18,11 @@ repositories {
 	mavenCentral()
 }
 
+compileJava {
+	options.compilerArgs += "-Amapstruct.defaultComponentModel=spring"
+	options.compilerArgs += "-Amapstruct.unmappedTargetPolicy=ERROR"
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -27,15 +32,17 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 	implementation 'javax.servlet:javax.servlet-api:4.0.1'
-	implementation 'org.mapstruct:mapstruct:1.5.2.Final'
+	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+	implementation 'org.projectlombok:lombok:1.18.20'
 
-	compileOnly 'org.projectlombok:lombok'
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-	annotationProcessor 'org.projectlombok:lombok'
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
+
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+	annotationProcessor 'org.projectlombok:lombok:1.18.20'
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
