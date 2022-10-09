@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final JwtTokenProvider tokenProvider;

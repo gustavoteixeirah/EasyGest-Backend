@@ -40,10 +40,11 @@ public class SecurityConfig {
                 .authenticationManager(reactiveAuthenticationManager)
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 .authorizeExchange(it -> it
-                        .pathMatchers(POST, "/authenticate", "/users").permitAll()
+                        .pathMatchers(POST, "/login").permitAll()
                         .pathMatchers("/actuator/**").permitAll()
+                        .pathMatchers(POST, USERS_PATH).permitAll()
                         .pathMatchers(GET, USERS_PATH).permitAll()
-                        .pathMatchers(DELETE, USERS_PATH).permitAll()
+                        .pathMatchers(DELETE, USERS_PATH).authenticated()
                         .pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
                         .anyExchange().permitAll()
                 )
