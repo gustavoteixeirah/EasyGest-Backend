@@ -16,3 +16,8 @@ management:
       show-details: always
       mongo:
         enabled: true
+
+logging:
+  level:
+    org.springframework.web: INFO
+    org.springframework.security: INFO

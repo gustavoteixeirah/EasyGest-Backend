@@ -16,11 +16,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.CorsConfigurationSource;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 import static org.springframework.http.HttpMethod.*;
 
@@ -34,7 +30,7 @@ public class SecurityConfig {
         final String USERS_PATH = "/users";
 
         return http
-                .cors().and()
+                .cors().configurationSource(corsConfig -> new CorsConfiguration().applyPermitDefaultValues()).and()
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authenticationManager(reactiveAuthenticationManager)
@@ -84,15 +80,6 @@ public class SecurityConfig {
         var authenticationManager = new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
         authenticationManager.setPasswordEncoder(passwordEncoder);
         return authenticationManager;
-    }
-
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        var corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("*"));
-        var source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfiguration);
-        return source;
     }
 
 }
