@@ -1,4 +1,4 @@
-name: Deploy backend
+name: Build and Test on Development Branch
 on:
   push:
     branches:

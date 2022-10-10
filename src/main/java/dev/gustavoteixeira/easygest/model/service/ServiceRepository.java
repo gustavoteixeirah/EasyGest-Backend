@@ -1,11 +1,16 @@
 package dev.gustavoteixeira.easygest.model.service;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 public interface ServiceRepository {
 
-    Service create(Service service);
+    Mono<String> create(Mono<NewService> service);
 
-    Service update(Service service);
+    Flux<Service> list();
 
-    void delete(String serviceId);
+    Mono<Service> update(Mono<Service> service);
+
+    Mono<Void> delete(Mono<String> serviceId);
 
 }

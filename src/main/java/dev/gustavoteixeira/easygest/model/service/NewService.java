@@ -11,8 +11,6 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor(access = PRIVATE)
 public class NewService {
 
-    String id;
-
     String description;
 
     String price;

@@ -17,12 +17,12 @@ import java.util.Map;
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
-public class AuthenticationController {
+class AuthenticationController {
     private final JwtTokenProvider tokenProvider;
     private final ReactiveAuthenticationManager authenticationManager;
 
     @PostMapping("/login")
-    public Mono<ResponseEntity<Map<String, String>>> login(@RequestBody Mono<AuthenticationRequest> authRequest) {
+    Mono<ResponseEntity<Map<String, String>>> login(@RequestBody Mono<AuthenticationRequest> authRequest) {
 
         return authRequest
                 .flatMap(login -> this.authenticationManager
