@@ -1,5 +1,6 @@
 package dev.gustavoteixeira.easygest.adapter.primary.http.authentication;
 
+import dev.gustavoteixeira.easygest.model.user.Roles;
 import dev.gustavoteixeira.easygest.model.user.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
@@ -29,6 +30,7 @@ public class SecurityConfig {
                                                 JwtTokenProvider tokenProvider,
                                                 ReactiveAuthenticationManager reactiveAuthenticationManager) {
         final String USERS_PATH = "/users";
+        final String USERS_PARTNERS_PATH = "/users/partners";
         final String SERVICES_PATH = "/services";
 
         return http
@@ -39,11 +41,12 @@ public class SecurityConfig {
                 .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 .authorizeExchange(it -> it
                         .pathMatchers(POST, "/login").permitAll()
-                        .pathMatchers("/actuator/**").permitAll()
                         .pathMatchers(POST, USERS_PATH).permitAll()
-                        .pathMatchers(GET, USERS_PATH).permitAll()
-                        .pathMatchers(DELETE, USERS_PATH).authenticated()
-                        .pathMatchers(SERVICES_PATH).authenticated()
+                        .pathMatchers(GET, USERS_PATH).hasAnyAuthority(Roles.REGULAR_USER.name(), Roles.PARTNER.name(), Roles.SYSTEM_ADMIN.name())
+                        .pathMatchers(SERVICES_PATH).hasAnyAuthority(Roles.REGULAR_USER.name(), Roles.PARTNER.name(), Roles.SYSTEM_ADMIN.name())
+                        .pathMatchers("/actuator/**").hasAuthority(Roles.SYSTEM_ADMIN.name())
+                        .pathMatchers(POST, USERS_PARTNERS_PATH).hasAuthority(Roles.SYSTEM_ADMIN.name())
+                        .pathMatchers(DELETE, USERS_PATH).hasAuthority(Roles.SYSTEM_ADMIN.name())
                         .pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
                         .anyExchange().permitAll()
                 )

@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 
+import static reactor.core.publisher.Mono.just;
 import static reactor.function.TupleUtils.function;
 
 @Slf4j
@@ -25,31 +26,35 @@ public class ServiceHttpAdapter {
 
     @PostMapping
     Mono<ResponseEntity<Void>> create(@RequestBody Mono<NewServiceRequest> newServiceRequest) {
+        log.info("Request to create a new service received.");
 
         return newServiceRequest.map(mapper::toNewService)
-                .flatMap(newService -> easygestApplication.create(Mono.just(newService)))
+                .flatMap(newService -> easygestApplication.create(just(newService)))
                 .map(url -> ResponseEntity.created(URI.create(url)).build());
     }
 
     @GetMapping
     Flux<Service> list() {
+        log.info("Request to list all services received.");
 
         return easygestApplication.list();
     }
 
     @PutMapping("/{id}")
     Mono<ResponseEntity<Service>> update(@PathVariable String id, @RequestBody Mono<UpdateServiceRequest> newServiceRequest) {
+        log.info("Request to update a existing service received.");
 
-        return newServiceRequest.zipWith(Mono.just(id))
+        return newServiceRequest.zipWith(just(id))
                 .map(function(mapper::toService))
-                .flatMap(newService -> easygestApplication.update(Mono.just(newService)))
+                .flatMap(newService -> easygestApplication.update(just(newService)))
                 .map(ResponseEntity::ok);
     }
 
     @DeleteMapping("/{id}")
     Mono<ResponseEntity<Void>> delete(@PathVariable String id) {
-        log.info("Deleting service {}", id);
-        return  easygestApplication.delete(Mono.just(id))
+        log.info("Request to delete a existing service received.");
+
+        return easygestApplication.delete(just(id))
                 .map(ResponseEntity::ok);
     }
 
