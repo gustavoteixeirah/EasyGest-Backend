@@ -20,6 +20,8 @@ import org.springframework.security.web.server.context.NoOpServerSecurityContext
 import org.springframework.web.cors.CorsConfiguration;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 import static org.springframework.http.HttpMethod.*;
 
 @EnableWebFluxSecurity
@@ -32,9 +34,12 @@ public class SecurityConfig {
         final String USERS_PATH = "/users";
         final String USERS_PARTNERS_PATH = "/users/partners";
         final String SERVICES_PATH = "/services";
+        final String SERVICES_FULL_PATH = "/services/**";
 
         return http
-                .cors().configurationSource(corsConfig -> new CorsConfiguration().applyPermitDefaultValues()).and()
+//                .cors()
+//                .configurationSource(corsConfig -> corsConfig())
+//                .and()
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authenticationManager(reactiveAuthenticationManager)
@@ -44,6 +49,7 @@ public class SecurityConfig {
                         .pathMatchers(POST, USERS_PATH).permitAll()
                         .pathMatchers(GET, USERS_PATH).hasAnyAuthority(Roles.REGULAR_USER.name(), Roles.PARTNER.name(), Roles.SYSTEM_ADMIN.name())
                         .pathMatchers(SERVICES_PATH).hasAnyAuthority(Roles.REGULAR_USER.name(), Roles.PARTNER.name(), Roles.SYSTEM_ADMIN.name())
+                        .pathMatchers(SERVICES_FULL_PATH).hasAnyAuthority(Roles.REGULAR_USER.name(), Roles.PARTNER.name(), Roles.SYSTEM_ADMIN.name())
                         .pathMatchers("/actuator/**").hasAuthority(Roles.SYSTEM_ADMIN.name())
                         .pathMatchers(POST, USERS_PARTNERS_PATH).hasAuthority(Roles.SYSTEM_ADMIN.name())
                         .pathMatchers(DELETE, USERS_PATH).hasAuthority(Roles.SYSTEM_ADMIN.name())
@@ -55,6 +61,14 @@ public class SecurityConfig {
 
 
     }
+
+//    private static CorsConfiguration corsConfig() {
+//        var corsConfiguration = new CorsConfiguration();
+//        corsConfiguration.setAllowedMethods(List.of("*"));
+//        corsConfiguration.setAllowedOrigins(List.of("*"));
+//        corsConfiguration.setAllowedHeaders(List.of("*"));
+//        return corsConfiguration;
+//    }
 
     private Mono<AuthorizationDecision> currentUserMatchesPath(Mono<Authentication> authentication,
                                                                AuthorizationContext context) {
