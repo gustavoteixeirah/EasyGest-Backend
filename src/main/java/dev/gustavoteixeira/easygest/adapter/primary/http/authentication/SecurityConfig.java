@@ -37,9 +37,9 @@ public class SecurityConfig {
         final String SERVICES_FULL_PATH = "/services/**";
 
         return http
-//                .cors()
-//                .configurationSource(corsConfig -> corsConfig())
-//                .and()
+                .cors()
+                .configurationSource(corsConfig -> corsConfig())
+                .and()
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .authenticationManager(reactiveAuthenticationManager)
@@ -62,13 +62,13 @@ public class SecurityConfig {
 
     }
 
-//    private static CorsConfiguration corsConfig() {
-//        var corsConfiguration = new CorsConfiguration();
-//        corsConfiguration.setAllowedMethods(List.of("*"));
-//        corsConfiguration.setAllowedOrigins(List.of("*"));
-//        corsConfiguration.setAllowedHeaders(List.of("*"));
-//        return corsConfiguration;
-//    }
+    private static CorsConfiguration corsConfig() {
+        var corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedMethods(List.of("*"));
+        corsConfiguration.setAllowedOrigins(List.of("*"));
+        corsConfiguration.setAllowedHeaders(List.of("*"));
+        return corsConfiguration;
+    }
 
     private Mono<AuthorizationDecision> currentUserMatchesPath(Mono<Authentication> authentication,
                                                                AuthorizationContext context) {
