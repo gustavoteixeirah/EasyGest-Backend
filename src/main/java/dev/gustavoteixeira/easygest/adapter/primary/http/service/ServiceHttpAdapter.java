@@ -2,6 +2,7 @@ package dev.gustavoteixeira.easygest.adapter.primary.http.service;
 
 
 import dev.gustavoteixeira.easygest.application.EasygestApplication;
+import dev.gustavoteixeira.easygest.model.rating.Rating;
 import dev.gustavoteixeira.easygest.model.service.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,7 @@ public class ServiceHttpAdapter {
         log.info("Request to create a new service received.");
 
         return newServiceRequest.map(mapper::toNewService)
-                .flatMap(newService -> easygestApplication.create(just(newService)))
+                .flatMap(newService -> easygestApplication.createNewService(just(newService)))
                 .map(url -> ResponseEntity.created(URI.create(url)).build());
     }
 
@@ -56,6 +57,13 @@ public class ServiceHttpAdapter {
 
         return easygestApplication.delete(just(id))
                 .map(ResponseEntity::ok);
+    }
+
+    @GetMapping("/{id}/ratings")
+    Flux<Rating> getServiceRatings(@PathVariable String id) {
+        log.info("Request to list service ratings.");
+
+        return easygestApplication.listServiceRatings(id);
     }
 
 }

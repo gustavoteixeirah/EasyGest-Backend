@@ -1,5 +1,8 @@
 package dev.gustavoteixeira.easygest.application;
 
+import dev.gustavoteixeira.easygest.model.rating.NewRating;
+import dev.gustavoteixeira.easygest.model.rating.Rating;
+import dev.gustavoteixeira.easygest.model.rating.RatingRepository;
 import dev.gustavoteixeira.easygest.model.service.NewService;
 import dev.gustavoteixeira.easygest.model.service.Service;
 import dev.gustavoteixeira.easygest.model.service.ServiceRepository;
@@ -15,10 +18,16 @@ import reactor.core.publisher.Mono;
 public class EasygestApplicationImpl implements EasygestApplication {
 
     private final ServiceRepository serviceRepository;
+    private final RatingRepository ratingRepository;
 
     @Override
-    public Mono<String> create(Mono<NewService> service) {
+    public Mono<String> createNewService(Mono<NewService> service) {
         return serviceRepository.create(service);
+    }
+
+    @Override
+    public Mono<String> createNewRating(Mono<NewRating> newRating) {
+        return ratingRepository.rate(newRating);
     }
 
     @Override
@@ -35,6 +44,16 @@ public class EasygestApplicationImpl implements EasygestApplication {
     public Mono<Void> delete(Mono<String> serviceId) {
         return serviceRepository.delete(serviceId)
                 .then();
+    }
+
+    @Override
+    public Flux<Rating> listServiceRatings(String id) {
+        return ratingRepository.findAllRatesOfService(Mono.just(id));
+    }
+
+    @Override
+    public Flux<Rating> listRatings() {
+        return ratingRepository.list();
     }
 
 }

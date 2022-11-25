@@ -9,16 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
 import java.util.List;
-
-import static java.util.Arrays.asList;
 
 @Slf4j
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-public class UserController {
+public class UserHttpAdapter {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;

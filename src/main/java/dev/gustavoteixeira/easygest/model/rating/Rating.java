@@ -15,12 +15,13 @@ public class Rating {
 
     String id;
 
-    String schedulingId;
+    String serviceId;
+
+    String userId;
 
     Stars stars;
 
     String description;
 
-    LocalDateTime dateTime;
 
 }

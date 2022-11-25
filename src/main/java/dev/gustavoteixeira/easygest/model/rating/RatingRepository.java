@@ -1,9 +1,17 @@
 package dev.gustavoteixeira.easygest.model.rating;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 public interface RatingRepository {
 
-    void rate(String serviceId, NewRating newRating);
+    Mono<String> rate(Mono<NewRating> newRating);
 
-    void delete(String ratingId);
+    Flux<Rating> findAllRatesOfService(Mono<String> serviceId);
 
+    Flux<Rating> findAllRatesOfUser(Mono<String> userId);
+
+    Mono<Void> delete(Mono<String> ratingId);
+
+    Flux<Rating> list();
 }
