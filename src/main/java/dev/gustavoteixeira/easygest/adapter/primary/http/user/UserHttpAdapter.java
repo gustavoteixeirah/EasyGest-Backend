@@ -4,12 +4,14 @@ import dev.gustavoteixeira.easygest.model.user.User;
 import dev.gustavoteixeira.easygest.model.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
+import static java.util.List.of;
+import static org.springframework.http.HttpStatus.CREATED;
 
 @Slf4j
 @RestController
@@ -21,6 +23,7 @@ public class UserHttpAdapter {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping
+    @ResponseStatus(CREATED)
     public Mono<String> create(@RequestBody Mono<NewUserRequest> newUser) {
         log.info("Request to create a new user received.");
 
@@ -29,7 +32,7 @@ public class UserHttpAdapter {
                         .username(nur.getUsername())
                         .password(passwordEncoder.encode(nur.getPassword()))
                         .email(nur.getEmail())
-                        .roles(List.of("REGULAR_USER"))
+                        .roles(of("REGULAR_USER"))
                         .build())
                 .flatMap(userRepository::insert)
                 .map(User::getId)
@@ -37,6 +40,7 @@ public class UserHttpAdapter {
     }
 
     @PostMapping("/partners")
+    @ResponseStatus(CREATED)
     public Mono<String> createPartner(@RequestBody Mono<NewUserRequest> newUser) {
         log.info("Request to create a new user received.");
 
@@ -45,7 +49,8 @@ public class UserHttpAdapter {
                         .username(nur.getUsername())
                         .password(passwordEncoder.encode(nur.getPassword()))
                         .email(nur.getEmail())
-                        .roles(List.of("PARTNER"))
+                        .roles(of("PARTNER"))
+                        .cnpj(nur.getCnpj())
                         .build())
                 .flatMap(userRepository::insert)
                 .map(User::getId)

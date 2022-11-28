@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: ${MONGO_URI:mongodb://localhost:27017/easygest}
+      uri: ${MONGO_URI:mongodb://localhost:27017/EasyGest}
       auto-index-creation: true
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss

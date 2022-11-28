@@ -17,6 +17,8 @@ class NewUserRequest {
 
     String password;
 
+    String cnpj;
+
     String email;
 
 }
