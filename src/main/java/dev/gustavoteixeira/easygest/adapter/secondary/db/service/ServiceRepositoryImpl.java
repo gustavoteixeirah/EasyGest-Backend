@@ -39,6 +39,13 @@ class ServiceRepositoryImpl implements ServiceRepository {
     }
 
     @Override
+    public Mono<Service> findById(String serviceId) {
+        return Mono.just(serviceId)
+                .flatMap(mongoAdapter::findById)
+                .map(mapper::toService);
+    }
+
+    @Override
     public Mono<Void> delete(Mono<String> serviceId) {
         return mongoAdapter.findById(serviceId)
                 .flatMap(mongoAdapter::delete)

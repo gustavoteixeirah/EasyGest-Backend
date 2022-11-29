@@ -5,6 +5,8 @@ import dev.gustavoteixeira.easygest.model.product.NewProduct;
 import dev.gustavoteixeira.easygest.model.product.Product;
 import dev.gustavoteixeira.easygest.model.rating.NewRating;
 import dev.gustavoteixeira.easygest.model.rating.Rating;
+import dev.gustavoteixeira.easygest.model.scheduling.NewScheduling;
+import dev.gustavoteixeira.easygest.model.scheduling.Scheduling;
 import dev.gustavoteixeira.easygest.model.service.NewService;
 import dev.gustavoteixeira.easygest.model.service.Service;
 import reactor.core.publisher.Flux;
@@ -34,5 +36,13 @@ public interface EasygestApplication {
     Mono<Product> updateProduct(Mono<Product> product);
 
     Mono<Void> deleteProduct(Mono<String> productId);
+
+    Mono<String> createScheduling(NewScheduling newScheduling);
+
+    Flux<Scheduling> listSchedulings();
+
+    Mono<Void> finishSchedule();
+
+    Mono<Void> cancelSchedule();
 
 }

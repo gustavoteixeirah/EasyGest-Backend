@@ -4,6 +4,7 @@ import dev.gustavoteixeira.easygest.model.service.Service;
 import dev.gustavoteixeira.easygest.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import org.joda.money.Money;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import static lombok.AccessLevel.PRIVATE;
 import static org.joda.money.CurrencyUnit.USD;
 import static org.joda.money.Money.zero;
 
+@Data
 @Builder
 @AllArgsConstructor(access = PRIVATE)
 public class Scheduling {
@@ -51,4 +53,8 @@ public class Scheduling {
             this.status = FINISHED;
     }
 
+    public void cancel() {
+        if (this.status != FINISHED)
+            this.status = CANCELLED;
+    }
 }

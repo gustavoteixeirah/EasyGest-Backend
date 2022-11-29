@@ -11,6 +11,8 @@ public interface ServiceRepository {
 
     Mono<Service> update(Mono<Service> service);
 
+    Mono<Service> findById(String serviceId);
+
     Mono<Void> delete(Mono<String> serviceId);
 
 }
