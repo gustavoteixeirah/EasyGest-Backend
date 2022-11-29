@@ -2,7 +2,6 @@ package dev.gustavoteixeira.easygest.adapter.primary.http.rating;
 
 import dev.gustavoteixeira.easygest.application.EasygestApplication;
 import dev.gustavoteixeira.easygest.model.rating.Rating;
-import dev.gustavoteixeira.easygest.model.service.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +37,14 @@ public class RatingHttpAdapter {
         log.info("Request to list all ratings.");
 
         return easygestApplication.listRatings();
+    }
+
+
+    @GetMapping("/ratings/{serviceId}")
+    Flux<Rating> getServiceRatings(@PathVariable String serviceId) {
+        log.info("Request to list service ratings.");
+
+        return easygestApplication.listServiceRatings(serviceId);
     }
 
 }

@@ -2,7 +2,6 @@ package dev.gustavoteixeira.easygest.adapter.primary.http.service;
 
 
 import dev.gustavoteixeira.easygest.application.EasygestApplication;
-import dev.gustavoteixeira.easygest.model.rating.Rating;
 import dev.gustavoteixeira.easygest.model.service.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +19,7 @@ import static reactor.function.TupleUtils.function;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/services")
-public class ServiceHttpAdapter {
+class ServiceHttpAdapter {
 
     private final EasygestApplication easygestApplication;
     private final ServiceHttpMapper mapper;
@@ -38,7 +37,7 @@ public class ServiceHttpAdapter {
     Flux<Service> list() {
         log.info("Request to list all services received.");
 
-        return easygestApplication.list();
+        return easygestApplication.listServices();
     }
 
     @PutMapping("/{id}")
@@ -57,13 +56,6 @@ public class ServiceHttpAdapter {
 
         return easygestApplication.delete(just(id))
                 .map(ResponseEntity::ok);
-    }
-
-    @GetMapping("/{id}/ratings")
-    Flux<Rating> getServiceRatings(@PathVariable String id) {
-        log.info("Request to list service ratings.");
-
-        return easygestApplication.listServiceRatings(id);
     }
 
 }

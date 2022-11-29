@@ -1,6 +1,8 @@
 package dev.gustavoteixeira.easygest.application;
 
 
+import dev.gustavoteixeira.easygest.model.product.NewProduct;
+import dev.gustavoteixeira.easygest.model.product.Product;
 import dev.gustavoteixeira.easygest.model.rating.NewRating;
 import dev.gustavoteixeira.easygest.model.rating.Rating;
 import dev.gustavoteixeira.easygest.model.service.NewService;
@@ -14,7 +16,7 @@ public interface EasygestApplication {
 
     Mono<String> createNewRating(Mono<NewRating> rating);
 
-    Flux<Service> list();
+    Flux<Service> listServices();
 
 
     Mono<Service> update(Mono<Service> service);
@@ -24,4 +26,13 @@ public interface EasygestApplication {
     Flux<Rating> listServiceRatings(String id);
 
     Flux<Rating> listRatings();
+
+    Mono<String> createProduct(Mono<NewProduct> newProduct);
+
+    Flux<Product> listProducts();
+
+    Mono<Product> updateProduct(Mono<Product> product);
+
+    Mono<Void> deleteProduct(Mono<String> productId);
+
 }

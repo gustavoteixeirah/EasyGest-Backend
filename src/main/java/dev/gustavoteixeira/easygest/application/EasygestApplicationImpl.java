@@ -1,5 +1,8 @@
 package dev.gustavoteixeira.easygest.application;
 
+import dev.gustavoteixeira.easygest.model.product.NewProduct;
+import dev.gustavoteixeira.easygest.model.product.Product;
+import dev.gustavoteixeira.easygest.model.product.ProductRepository;
 import dev.gustavoteixeira.easygest.model.rating.NewRating;
 import dev.gustavoteixeira.easygest.model.rating.Rating;
 import dev.gustavoteixeira.easygest.model.rating.RatingRepository;
@@ -20,6 +23,8 @@ public class EasygestApplicationImpl implements EasygestApplication {
     private final ServiceRepository serviceRepository;
     private final RatingRepository ratingRepository;
 
+    private final ProductRepository productRepository;
+
     @Override
     public Mono<String> createNewService(Mono<NewService> service) {
         return serviceRepository.create(service);
@@ -31,7 +36,7 @@ public class EasygestApplicationImpl implements EasygestApplication {
     }
 
     @Override
-    public Flux<Service> list() {
+    public Flux<Service> listServices() {
         return serviceRepository.list();
     }
 
@@ -55,5 +60,26 @@ public class EasygestApplicationImpl implements EasygestApplication {
     public Flux<Rating> listRatings() {
         return ratingRepository.list();
     }
+
+    @Override
+    public Mono<String> createProduct(Mono<NewProduct> newProduct) {
+        return productRepository.create(newProduct);
+    }
+
+    @Override
+    public Flux<Product> listProducts() {
+        return productRepository.list();
+    }
+
+    @Override
+    public Mono<Product> updateProduct(Mono<Product> product) {
+        return productRepository.update(product);
+    }
+
+    @Override
+    public Mono<Void> deleteProduct(Mono<String> productId) {
+        return productRepository.delete(productId);
+    }
+
 
 }

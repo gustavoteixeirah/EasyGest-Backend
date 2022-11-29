@@ -19,8 +19,8 @@ class ServiceRepositoryImpl implements ServiceRepository {
 
 
     @Override
-    public Mono<String> create(Mono<NewService> service) {
-        return service.map(mapper::toServiceDocument)
+    public Mono<String> create(Mono<NewService> newService) {
+        return newService.map(mapper::toServiceDocument)
                 .flatMap(mongoAdapter::save)
                 .map(ServiceDocument::getId);
     }
