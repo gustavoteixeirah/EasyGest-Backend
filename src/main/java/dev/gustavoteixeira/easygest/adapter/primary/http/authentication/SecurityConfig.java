@@ -32,6 +32,7 @@ public class SecurityConfig {
                                                 JwtTokenProvider tokenProvider,
                                                 ReactiveAuthenticationManager reactiveAuthenticationManager) {
         final String USERS_PATH = "/users";
+        final String USERS_ME_PATH = "/users/me";
         final String USERS_PARTNERS_PATH = "/users/partners";
         final String SERVICES_PATH = "/services";
         final String SERVICES_FULL_PATH = "/services/**";
@@ -47,6 +48,7 @@ public class SecurityConfig {
                 .authorizeExchange(it -> it
                         .pathMatchers(POST, "/login").permitAll()
                         .pathMatchers(POST, USERS_PATH).permitAll()
+                        .pathMatchers(GET, USERS_ME_PATH).permitAll()
                         .pathMatchers(GET, USERS_PATH).hasAnyAuthority(Roles.REGULAR_USER.name(), Roles.PARTNER.name(), Roles.SYSTEM_ADMIN.name())
                         .pathMatchers(SERVICES_PATH).hasAnyAuthority(Roles.REGULAR_USER.name(), Roles.PARTNER.name(), Roles.SYSTEM_ADMIN.name())
                         .pathMatchers(SERVICES_FULL_PATH).hasAnyAuthority(Roles.REGULAR_USER.name(), Roles.PARTNER.name(), Roles.SYSTEM_ADMIN.name())

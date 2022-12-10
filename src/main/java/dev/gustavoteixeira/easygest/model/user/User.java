@@ -33,7 +33,6 @@ public class User {
     @Indexed(unique = true)
     String email;
 
-    @Indexed(unique = true)
     String cnpj;
 
     @Builder.Default()

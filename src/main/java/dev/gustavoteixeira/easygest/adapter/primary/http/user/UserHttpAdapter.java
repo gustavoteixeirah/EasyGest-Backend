@@ -1,14 +1,16 @@
 package dev.gustavoteixeira.easygest.adapter.primary.http.user;
 
+import dev.gustavoteixeira.easygest.adapter.primary.http.authentication.AuthenticationFacade;
 import dev.gustavoteixeira.easygest.model.user.User;
 import dev.gustavoteixeira.easygest.model.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.security.Principal;
 
 import static java.util.List.of;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -21,6 +23,7 @@ public class UserHttpAdapter {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationFacade authenticationFacade;
 
     @PostMapping
     @ResponseStatus(CREATED)
@@ -64,6 +67,14 @@ public class UserHttpAdapter {
         return userRepository.findAll();
     }
 
+    @GetMapping("/me")
+    public Mono<User> getMyData() {
+        log.info("Request to get data from the user making the request.");
+
+        return authenticationFacade.getAuthentication()
+                .map(Principal::getName)
+                .flatMap(userRepository::findByUsername);
+    }
 
     @DeleteMapping
     public Mono<Void> nuke() {
