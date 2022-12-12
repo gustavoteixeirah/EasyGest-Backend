@@ -2,7 +2,6 @@ package dev.gustavoteixeira.easygest.adapter.secondary.db.scheduling;
 
 import dev.gustavoteixeira.easygest.model.scheduling.SchedulingState;
 import dev.gustavoteixeira.easygest.model.service.Service;
-import dev.gustavoteixeira.easygest.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -29,6 +28,6 @@ class SchedulingDocument {
 
     SchedulingState status;
 
-    User customer;
+    UserSchedulingDocument customer;
 
 }

@@ -7,9 +7,10 @@ import org.mapstruct.Mapping;
 @Mapper
 interface SchedulingMapper {
 
+    @Mapping(target = "customer.password", ignore = true)
     Scheduling toScheduling(SchedulingDocument schedulingDocument);
 
-//    @Mapping(target = "id", ignore = true)
+    //    @Mapping(target = "id", ignore = true)
     SchedulingDocument toSchedulingDocument(Scheduling scheduling);
 
 }
