@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
@@ -26,5 +27,13 @@ class SchedulingHttpAdapter {
         return newSchedulingRequest.map(mapper::toNewScheduling)
                 .flatMap(easygestApplication::createScheduling)
                 .map(url -> created(URI.create(url)).build());
+    }
+
+    @GetMapping
+    Flux<SchedulingResponse> list(@RequestBody Mono<NewSchedulingRequest> newSchedulingRequest) {
+        log.info("Request to list all scheduling.");
+
+        return easygestApplication.listSchedulings()
+                .map(mapper::toSchedulingResponse);
     }
 }
