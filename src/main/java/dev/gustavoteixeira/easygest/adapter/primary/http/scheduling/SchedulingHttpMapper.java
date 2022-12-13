@@ -7,8 +7,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import java.math.RoundingMode;
 import java.util.List;
 
+import static java.math.RoundingMode.HALF_EVEN;
 import static java.util.stream.Collectors.toList;
 
 @Mapper
@@ -18,15 +20,24 @@ interface SchedulingHttpMapper {
     NewScheduling toNewScheduling(NewSchedulingRequest newSchedulingRequest);
 
     @Mapping(target = "customerId", source = "customer.id")
-    @Mapping(target = "servicesId", source = "services", qualifiedByName = "servicesId")
+    @Mapping(target = "servicesDescription", source = "services", qualifiedByName = "servicesDescription")
+    @Mapping(target = "price", source = "scheduling", qualifiedByName = "getPriceAsString")
     SchedulingResponse toSchedulingResponse(Scheduling scheduling);
 
-
-    @Named("servicesId")
-    default List<String> servicesToServicesId(List<Service> services) {
+    @Named("servicesDescription")
+    default List<String> servicesToServicesDescription(List<Service> services) {
         return services.stream()
-                .map(Service::getId)
+                .map(Service::getDescription)
                 .collect(toList());
+    }
+
+    @Named("getPriceAsString")
+    default String getPriceAsString(Scheduling scheduling) {
+
+        return scheduling
+                .getPrice()
+                .setScale(2, HALF_EVEN)
+                .toString();
     }
 
 

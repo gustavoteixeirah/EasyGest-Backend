@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.joda.money.Money;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,11 +18,17 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 @AllArgsConstructor
 class SchedulingResponse {
 
+    String id;
+
     String customerId;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", shape = STRING)
     LocalDateTime dateTime;
 
-    List<String> servicesId;
+    List<String> servicesDescription;
+
+    int duration;
+
+    String price;
 
 }
