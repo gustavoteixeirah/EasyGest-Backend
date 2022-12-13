@@ -114,7 +114,12 @@ public class EasygestApplicationImpl implements EasygestApplication {
 
     @Override
     public Flux<Scheduling> listSchedulings() {
-        return null;
+        return schedulingRepository.list();
+    }
+
+    @Override
+    public Flux<Scheduling> listSchedulingsOfUser(Mono<String> username) {
+        return schedulingRepository.listFrom(username);
     }
 
     @Override

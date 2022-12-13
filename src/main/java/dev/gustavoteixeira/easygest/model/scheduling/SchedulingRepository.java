@@ -15,4 +15,5 @@ public interface SchedulingRepository {
 
     Mono<Void> cancel(Mono<String> schedulingId);
 
+    Flux<Scheduling> listFrom(Mono<String> username);
 }

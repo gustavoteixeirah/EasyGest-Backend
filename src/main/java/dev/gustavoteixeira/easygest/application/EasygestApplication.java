@@ -41,6 +41,8 @@ public interface EasygestApplication {
 
     Flux<Scheduling> listSchedulings();
 
+    Flux<Scheduling> listSchedulingsOfUser(Mono<String> username);
+
     Mono<Void> finishSchedule();
 
     Mono<Void> cancelSchedule();

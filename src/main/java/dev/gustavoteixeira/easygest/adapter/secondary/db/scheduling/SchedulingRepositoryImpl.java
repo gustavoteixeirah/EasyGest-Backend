@@ -28,6 +28,12 @@ class SchedulingRepositoryImpl implements SchedulingRepository {
     }
 
     @Override
+    public Flux<Scheduling> listFrom(Mono<String> username) {
+        return username.flatMapMany(mongoAdapter::findAllByCustomer_Username)
+                .map(mapper::toScheduling);
+    }
+
+    @Override
     public Mono<Void> confirm(Mono<String> schedulingId) {
         return schedulingId.flatMap(mongoAdapter::findById)
                 .map(mapper::toScheduling)
