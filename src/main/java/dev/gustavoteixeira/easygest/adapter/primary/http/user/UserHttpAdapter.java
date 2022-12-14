@@ -72,32 +72,7 @@ public class UserHttpAdapter {
                 .cnpj(tuple.getT2().getCnpj())
                 .build())
                 .flatMap(userRepository::save)
-                .map(User::getId)
-                .log();
-//        return newUser.map(nur -> User.builder()
-//                        .id(id)
-//                        .fullName(nur.getFullName())
-//                        .username(nur.getUsername())
-//                        .password(passwordEncoder.encode(nur.getPassword()))
-//                        .email(nur.getEmail())
-//                        .roles(of("PARTNER"))
-//                        .cnpj(nur.getCnpj())
-//                        .build())
-//                .flatMap(userRepository::save)
-//                .map(User::getId)
-//                .log();
-//        return newUser.map(nur -> User.builder()
-//                        .id(id)
-//                        .fullName(nur.getFullName())
-//                        .username(nur.getUsername())
-//                        .password(passwordEncoder.encode(nur.getPassword()))
-//                        .email(nur.getEmail())
-//                        .roles(of("PARTNER"))
-//                        .cnpj(nur.getCnpj())
-//                        .build())
-//                .flatMap(userRepository::save)
-//                .map(User::getId)
-//                .log();
+                .map(User::getId);
     }
 
     @GetMapping
