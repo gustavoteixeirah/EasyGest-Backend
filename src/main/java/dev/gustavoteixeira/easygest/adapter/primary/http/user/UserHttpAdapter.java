@@ -14,6 +14,7 @@ import java.security.Principal;
 
 import static java.util.List.of;
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @Slf4j
 @RestController
@@ -60,11 +61,64 @@ public class UserHttpAdapter {
                 .log();
     }
 
+    @PutMapping("/partners/{id}")
+    @ResponseStatus(OK)
+    public Mono<String> createPartner(@PathVariable String id, @RequestBody Mono<NewUserRequest> newUser) {
+        log.info("Request to update a partner received.");
+        return userRepository.findById(id).zipWith(newUser).map((tuple) -> tuple.getT1().toBuilder()
+                .fullName(tuple.getT2().getFullName())
+                .username(tuple.getT2().getUsername())
+                .email(tuple.getT2().getEmail())
+                .cnpj(tuple.getT2().getCnpj())
+                .build())
+                .flatMap(userRepository::save)
+                .map(User::getId)
+                .log();
+//        return newUser.map(nur -> User.builder()
+//                        .id(id)
+//                        .fullName(nur.getFullName())
+//                        .username(nur.getUsername())
+//                        .password(passwordEncoder.encode(nur.getPassword()))
+//                        .email(nur.getEmail())
+//                        .roles(of("PARTNER"))
+//                        .cnpj(nur.getCnpj())
+//                        .build())
+//                .flatMap(userRepository::save)
+//                .map(User::getId)
+//                .log();
+//        return newUser.map(nur -> User.builder()
+//                        .id(id)
+//                        .fullName(nur.getFullName())
+//                        .username(nur.getUsername())
+//                        .password(passwordEncoder.encode(nur.getPassword()))
+//                        .email(nur.getEmail())
+//                        .roles(of("PARTNER"))
+//                        .cnpj(nur.getCnpj())
+//                        .build())
+//                .flatMap(userRepository::save)
+//                .map(User::getId)
+//                .log();
+    }
+
     @GetMapping
     public Flux<User> getAll() {
         log.info("Request to list users received.");
 
         return userRepository.findAll();
+    }
+
+    @GetMapping("/partners")
+    public Flux<User> getAllPartners() {
+        log.info("Request to list partners received.");
+
+        return userRepository.findAllByRolesContaining("PARTNER");
+    }
+
+    @GetMapping("/regular-users")
+    public Flux<User> getAllRegularUsers() {
+        log.info("Request to list partners received.");
+
+        return userRepository.findAllByRolesContaining("REGULAR_USER");
     }
 
     @GetMapping("/me")
@@ -83,5 +137,11 @@ public class UserHttpAdapter {
         return userRepository.deleteAll();
     }
 
+    @DeleteMapping("/{id}")
+    public Mono<Void> deleteById(@PathVariable String id) {
+        log.info("Request to delete all users received.");
+
+        return userRepository.deleteById(id);
+    }
 
 }
